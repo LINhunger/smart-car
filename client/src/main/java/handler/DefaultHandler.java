@@ -2,6 +2,7 @@ package handler;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.CharsetUtil;
@@ -30,10 +31,13 @@ public class DefaultHandler extends
             while ((temp = in.read()) != -1) {
                 buf.writeByte(temp);
             }
+            in.close();
             ctx.writeAndFlush(buf);
         }
+        //关闭channel
+        ctx.writeAndFlush(Unpooled.EMPTY_BUFFER)
+                .addListener(ChannelFutureListener.CLOSE);
 
-        ctx.fireChannelActive();
     }
 
     @Override

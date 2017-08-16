@@ -46,32 +46,30 @@ public class DefaultClient {
                     });
             ChannelFuture f1 = b.connect();
             ChannelFuture f2 = b.connect();
-            ChannelFuture f3 = b.connect();
-            ChannelFuture f4 = b.connect();
-            ChannelFuture f5 = b.connect();
-            ChannelFuture f6 = b.connect();
+//            ChannelFuture f3 = b.connect();
+//            ChannelFuture f4 = b.connect();
+//            ChannelFuture f5 = b.connect();
+//            ChannelFuture f6 = b.connect();
             //关闭连接
             f1.channel().closeFuture().sync();
+
             f2.channel().closeFuture().sync();
-            f3.channel().closeFuture().sync();
-            f4.channel().closeFuture().sync();
-            f5.channel().closeFuture().sync();
-            f6.channel().closeFuture().sync();
-            // Start the client.
-//            for(int i = 1; i <= CLIENT_NUN; i++) {
-//                startConnection(b, i);
-//            }
+//            f3.channel().closeFuture().sync();
+//            f4.channel().closeFuture().sync();
+//            f5.channel().closeFuture().sync();
+//            f6.channel().closeFuture().sync();
+
         } finally {
             group.shutdownGracefully().sync();
         }
     }
 
-//    public static void main(String[] args) throws Exception {
-//
-//        final String host = "localhost";
-//        final int port = 10000;
-//        new DefaultClient(host, port).start();
-//    }
+    public static void main(String[] args) throws Exception {
+
+        final String host = "localhost";
+        final int port = 10000;
+        new DefaultClient(host, port).start();
+    }
 
 
 

@@ -37,11 +37,9 @@ public class GateServer {
                     protected void initChannel(SocketChannel channel)
                             throws Exception {
                         ChannelPipeline pipeline = channel.pipeline();
-//                        pipeline.addLast("MessageDecoder", new PacketDecoder());// TODO: 2017/8/3
-//                        pipeline.addLast("MessageEncoder", new PacketEncoder());// TODO: 2017/8/3
 
                         ByteBuf delimiter  = Unpooled.copiedBuffer(TransUtil.toByteArray("FFD9"));
-                        pipeline.addLast("DelimiterBasedFrameDecoder", new DelimiterBasedFrameDecoder(64*1024, delimiter));
+                        pipeline.addLast("DelimiterBasedFrameDecoder", new DelimiterBasedFrameDecoder(100*1024, delimiter));
                         pipeline.addLast("ClientMessageHandler", new GateServerHandler());
                     }
                 });
@@ -53,9 +51,6 @@ public class GateServer {
             public void operationComplete(ChannelFuture future)
                     throws Exception {
                 if (future.isSuccess()) {
-                    //init Registry
-//                    ParseRegistryMap.initRegistry();// TODO: 2017/8/3
-//                    TransferHandlerMap.initRegistry();// TODO: 2017/8/3
                     logger.info("[GateServer] Started Successed, registry is complete, waiting for client connect...");
                 } else {
                     logger.error("[GateServer] Started Failed, registry is incomplete");
@@ -70,7 +65,6 @@ public class GateServer {
         bootstrap.childOption(ChannelOption.SO_LINGER, 0);
         bootstrap.childOption(ChannelOption.TCP_NODELAY, true);
 
-        bootstrap.childOption(ChannelOption.SO_REUSEADDR, true); //调试用
         bootstrap.childOption(ChannelOption.SO_KEEPALIVE, true); //心跳机制暂时使用TCP选项，之后再自己实现
 
     }

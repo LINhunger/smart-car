@@ -38,7 +38,7 @@ public class SmartClient {
                     }
                 });
 
-        // Start the client.
+        // Start the client
         for(int i = 1; i <= CLIENT_NUN; i++) {
             startConnection(b, i);
         }
@@ -52,8 +52,6 @@ public class SmartClient {
                     public void operationComplete(ChannelFuture future)
                             throws Exception {
                         if (future.isSuccess()) {
-                            //init registry
-//                            ParseRegistryMap.initRegistry();// TODO: 2017/8/4
                             LOGGER.info("Client[{}] connected Gate Successed...", index);
                         } else {
                             LOGGER.error("Client[{}] connected Gate Failed", index);
