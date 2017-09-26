@@ -4,19 +4,25 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <!--<parent>-->
+        <!--<groupId>org.springframework.boot</groupId>-->
+        <!--<artifactId>spring-boot-starter-parent</artifactId>-->
+        <!--<version>1.5.7.RELEASE</version>-->
+        <!--<relativePath/> &lt;!&ndash; lookup parent from repository &ndash;&gt;-->
+    <!--</parent>-->
+
     <groupId>com.qg.smart-car</groupId>
     <artifactId>smart-car</artifactId>
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>client</module>
-        <module>auth</module>
         <module>gate</module>
-        <module>logic</module>
-        <module>protobuf</module>
-        <module>thirdparty</module>
-        <module>test</module>
+        <!--<module>appserver</module>-->
     </modules>
     <packaging>pom</packaging>
+
+
+
 
     <build>
         <plugins>
@@ -117,21 +123,5 @@
             <artifactId>commons-cli</artifactId>
             <version>${version.commons-cli}</version>
         </dependency>
-
-        <!-- jedis-->
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <version>${version.jedis}</version>
-        </dependency>
-
-        <!-- thrift-->
-        <dependency>
-            <groupId>org.apache.thrift</groupId>
-            <artifactId>libthrift</artifactId>
-            <version>${version.thrift}</version>
-        </dependency>
-
-
     </dependencies>
 </project>
