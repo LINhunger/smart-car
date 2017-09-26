@@ -64,7 +64,6 @@ public class GateServer {
         bootstrap.option(ChannelOption.SO_BACKLOG, 1024);
         bootstrap.childOption(ChannelOption.SO_LINGER, 0);
         bootstrap.childOption(ChannelOption.TCP_NODELAY, true);
-
         bootstrap.childOption(ChannelOption.SO_KEEPALIVE, true); //心跳机制暂时使用TCP选项，之后再自己实现
 
     }
