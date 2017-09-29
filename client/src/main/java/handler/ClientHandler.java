@@ -46,11 +46,12 @@ public class ClientHandler extends
     }
 
     private static void  testUpload(ChannelHandlerContext ctx)  {
+        long startTime = System.currentTimeMillis();
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
                 try{
-                    File[] files  = FileUtil.getFilesByPathAndSuffix("E:\\code\\智能小车\\智能小车\\代码\\ffmpeg-20170724-03a9e6f-win64-static\\bin\\temp",".jpg");
+                    File[] files  = FileUtil.getFilesByPathAndSuffix("J:\\project_smartCar\\temp",".jpg");
                     for (int i =0 ;i <files.length;i++) {
                         System.out.println(files[i].getName());
                         ByteBuf buf = Unpooled.buffer();
@@ -60,13 +61,14 @@ public class ClientHandler extends
                             buf.writeByte(temp);
                         }
                         in.close();
-                        Thread.sleep(1000L);
+//                        Thread.sleep(1000L);
                         ctx.writeAndFlush(buf);
                     }
                 }catch (Exception e) {
                     System.err.println("testUpload method has been failed ");
                 }
-                System.out.println("testUpload >> :  finish");
+                System.out.println("testUpload >> :  finish：耗时："+(System.currentTimeMillis()-startTime));
+                ctx.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
             }
         });
         t.start();

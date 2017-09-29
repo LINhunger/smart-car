@@ -5,6 +5,12 @@
 
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <artifactId>smart-car</artifactId>
+        <groupId>com.qg.smart-car</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
     <artifactId>smart-gate</artifactId>
     <packaging>jar</packaging>
 
@@ -15,6 +21,6 @@
             <artifactId>activemq-core</artifactId>
             <version>5.7.0</version>
         </dependency>
-</dependencies>
+    </dependencies>
 
 </project>

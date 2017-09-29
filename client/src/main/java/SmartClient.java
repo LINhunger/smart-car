@@ -7,22 +7,19 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetSocketAddress;
 
 /**
  * Created by hunger on 2017/8/4.
  */
+@Slf4j
 public class SmartClient {
 
 
-    public static final int CLIENT_NUN = 1;
     private final String host;
     private final int port;
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(SmartClient.class);
 
     public SmartClient(String host, int port) {
         this.host = host;
@@ -46,11 +43,11 @@ public class SmartClient {
                         }
                     });
             ChannelFuture f1 = b.connect();
-            ChannelFuture f2 = b.connect();
+//            ChannelFuture f2 = b.connect();
 
             //关闭连接
             f1.channel().closeFuture().sync();
-            f2.channel().closeFuture().sync();
+//            f2.channel().closeFuture().sync();
 
         } finally {
             group.shutdownGracefully().sync();
@@ -58,9 +55,10 @@ public class SmartClient {
     }
 
     public static void main(String[] args) throws Exception {
-        final String host = "127.0.0.1";  //10.21.48.11
+        final String host = "10.21.48.11";
+
         final int port = 10000;
-        new SmartClient(host, port).start();
+        new SmartClient("localhost", port).start();
     }
 
 
@@ -72,9 +70,9 @@ public class SmartClient {
                     public void operationComplete(ChannelFuture future)
                             throws Exception {
                         if (future.isSuccess()) {
-                            LOGGER.info("Client[{}] connected Gate Successed...", index);
+                            log.info("Client[{}] connected Gate Successed...", index);
                         } else {
-                            LOGGER.error("Client[{}] connected Gate Failed", index);
+                            log.error("Client[{}] connected Gate Failed", index);
                         }
                     }
                 });

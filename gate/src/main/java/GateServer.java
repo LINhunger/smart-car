@@ -1,4 +1,5 @@
 import handler.GateServerHandler;
+import handler.PictureCollectHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -41,6 +42,7 @@ public class GateServer {
                         ByteBuf delimiter  = Unpooled.copiedBuffer(TransUtil.toByteArray("FFD9"));
                         pipeline.addLast("DelimiterBasedFrameDecoder", new DelimiterBasedFrameDecoder(100*1024, delimiter));
                         pipeline.addLast("ClientMessageHandler", new GateServerHandler());
+                        pipeline.addLast("PictureCollectHandler", new PictureCollectHandler());
                     }
                 });
         //配置option

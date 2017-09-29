@@ -1,28 +1,28 @@
 package handler;
 
+import constant.GlobalConfig;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.util.CharsetUtil;
-import io.netty.util.internal.SystemPropertyUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import util.ActiveMQReceiverUtil;
 import util.FileUtil;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicInteger;
+
+
 
 /**
  * Created by Dell on 2016/2/1.
  */
 @ChannelHandler.Sharable
+@Slf4j
 public class GateServerHandler extends ChannelInboundHandlerAdapter {
-    private static final Logger LOGGER = LoggerFactory.getLogger(GateServerHandler.class);
-    private static final String  PICTURE_PATH = "J:\\JAVA\\repo\\com\\qg\\smart-car\\picture\\";
-    private AtomicInteger pictureGenerator = new AtomicInteger(0);
+
+//    InheritableThreadLocal<Boolean> flag = new InheritableThreadLocal<Boolean>();
+
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -31,30 +31,19 @@ public class GateServerHandler extends ChannelInboundHandlerAdapter {
         //唯一标识判断//todo
         String carId = "1";
         //开始接受并转发消息队列的指令
+//        flag.set(Boolean.TRUE);
         deliverCommand(carId, ctx);
-        FileUtil.createDir(PICTURE_PATH+this);
+        FileUtil.deleteAllFiles(new File(GlobalConfig.PICTURE_PATH+GlobalConfig.CAR_ID));
+        FileUtil.createDir(GlobalConfig.PICTURE_PATH+GlobalConfig.CAR_ID);
 
         ctx.fireChannelActive();
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object message) throws Exception {
-        ByteBuf buf = (ByteBuf) message;
-        File filename = new File(PICTURE_PATH+this+"\\"+String.format("%05d",pictureGenerator.incrementAndGet())+".jpg");
-        filename.createNewFile();
-        try(
-            OutputStream out = new BufferedOutputStream(
-                    new FileOutputStream(filename))) {
-            byte b =buf.readByte();
-            while(b == 0);
-            while(buf.isReadable()){
-                out.write(b);
-                b =buf.readByte();
-            }
-        }
-        buf.release();
-        LOGGER.info("byte stream write success!!!");
+        ctx.fireChannelRead(message);
     }
+
 
 //    @Override
 //    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
@@ -65,16 +54,53 @@ public class GateServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
         System.out.println("client has disconnect !");
+//        flag.set(Boolean.FALSE);
         ctx.fireChannelInactive();
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
             throws Exception {
+//        flag.set(Boolean.FALSE);
         System.out.println(cause.getMessage());
         ctx.fireExceptionCaught(cause);
 
     }
+
+    private void deliverCommand(String carId, ChannelHandlerContext ctx)  {
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                    try{
+                        //从队列拉去指令并转发
+                        System.out.println("队列创建 >> : "+carId);
+                        ActiveMQReceiverUtil.queueReceiver(carId, ctx);
+                    }catch (Exception e) {
+                        System.err.println("deliverCommand method has been failed ");
+                    }
+                    System.out.println("队列销毁 >> : "+carId);
+            }
+        });
+        t.start();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * 指令测试
@@ -117,23 +143,5 @@ public class GateServerHandler extends ChannelInboundHandlerAdapter {
         });
 //        t.start();
 
-    }
-
-
-    private void deliverCommand(String carId, ChannelHandlerContext ctx)  {
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                    try{
-                        //从队列拉去指令并转发
-                        System.out.println("队列创建 >> : "+carId);
-                        ActiveMQReceiverUtil.queueReceiver(carId, ctx);
-                    }catch (Exception e) {
-                        System.err.println("deliverCommand method has been failed ");
-                    }
-                    System.out.println("队列销毁 >> : "+carId);
-            }
-        });
-        t.start();
     }
 }
