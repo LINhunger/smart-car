@@ -17,7 +17,6 @@ import java.util.ArrayList;
 /**
  * Created by Dell on 2016/2/1.
  */
-@ChannelHandler.Sharable
 @Slf4j
 public class GateServerHandler extends ChannelInboundHandlerAdapter {
 
@@ -33,9 +32,9 @@ public class GateServerHandler extends ChannelInboundHandlerAdapter {
         //开始接受并转发消息队列的指令
 //        flag.set(Boolean.TRUE);
         deliverCommand(carId, ctx);
+        //TODO
         FileUtil.deleteAllFiles(new File(GlobalConfig.PICTURE_PATH+GlobalConfig.CAR_ID));
         FileUtil.createDir(GlobalConfig.PICTURE_PATH+GlobalConfig.CAR_ID);
-
         ctx.fireChannelActive();
     }
 
@@ -54,6 +53,7 @@ public class GateServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
         System.out.println("client has disconnect !");
+        FileUtil.deleteAllFiles(new File(GlobalConfig.PICTURE_PATH+GlobalConfig.CAR_ID));
 //        flag.set(Boolean.FALSE);
         ctx.fireChannelInactive();
     }

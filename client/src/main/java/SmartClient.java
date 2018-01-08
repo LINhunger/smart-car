@@ -37,8 +37,8 @@ public class SmartClient {
                         @Override
                         public void initChannel(SocketChannel ch)
                                 throws Exception {
-                            ByteBuf delimiter  = Unpooled.copiedBuffer("#".getBytes());
-                            ch.pipeline().addLast(new DelimiterBasedFrameDecoder(64, delimiter));
+//                            ByteBuf delimiter  = Unpooled.copiedBuffer("#".getBytes());
+//                            ch.pipeline().addLast(new DelimiterBasedFrameDecoder(64, delimiter));
                             ch.pipeline().addLast(new ClientHandler());
                         }
                     });
@@ -55,8 +55,8 @@ public class SmartClient {
     }
 
     public static void main(String[] args) throws Exception {
-        final String host = "10.21.48.11";
-
+        final String host = "119.29.136.208";
+        final String testHost = "192.168.155.3";
         final int port = 10000;
         new SmartClient("localhost", port).start();
     }

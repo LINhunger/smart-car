@@ -42,7 +42,8 @@ public class FileUtil {
 
     /**
      * 后缀名
-     *  过滤后缀名遍历文件夹文件
+     * 过滤后缀名遍历文件夹文件
+     *
      * @param pathStr
      * @param sufixStr
      * @return
@@ -55,12 +56,13 @@ public class FileUtil {
 
     /**
      * 创建文件
+     *
      * @param destFileName
      * @return
      */
     public static boolean createFile(String destFileName) {
         File file = new File(destFileName);
-        if(file.exists()) {
+        if (file.exists()) {
             LOGGER.error("创建单个文件" + destFileName + "失败，目标文件已存在！");
             return false;
         }
@@ -69,10 +71,10 @@ public class FileUtil {
             return false;
         }
         //判断目标文件所在的目录是否存在
-        if(!file.getParentFile().exists()) {
+        if (!file.getParentFile().exists()) {
             //如果目标文件所在的目录不存在，则创建父目录
             LOGGER.info("目标文件所在目录不存在，准备创建它！");
-            if(!file.getParentFile().mkdirs()) {
+            if (!file.getParentFile().mkdirs()) {
                 LOGGER.error("创建目标文件所在目录失败！");
                 return false;
             }
@@ -94,6 +96,7 @@ public class FileUtil {
 
     /**
      * 创建文件夹
+     *
      * @param destDirName
      * @return
      */
@@ -118,16 +121,17 @@ public class FileUtil {
 
     /**
      * 递归删除目录下的所有文件及子目录下所有文件
+     *
      * @param dir 将要删除的文件目录
      * @return boolean Returns "true" if all deletions were successful.
-     *                 If a deletion fails, the method stops attempting to
-     *                 delete and returns "false".
+     * If a deletion fails, the method stops attempting to
+     * delete and returns "false".
      */
     public static boolean deleteDir(File dir) {
         if (dir.isDirectory()) {
             String[] children = dir.list();
             //递归删除目录中的子目录下
-            for (int i=0; i<children.length; i++) {
+            for (int i = 0; i < children.length; i++) {
                 boolean success = deleteDir(new File(dir, children[i]));
                 if (!success) {
                     return false;
@@ -140,6 +144,7 @@ public class FileUtil {
 
     /**
      * 删除目录下全部分拣
+     *
      * @param root
      */
     public static void deleteAllFiles(File root) {
@@ -148,6 +153,28 @@ public class FileUtil {
             for (File f : files) {
                 f.delete();
             }
+        }
+    }
+
+
+    /**
+     * 修改文件名
+     *
+     * @param toBeRenamed
+     * @param newFile
+     */
+    public static void renameFile(File toBeRenamed, File newFile) {
+
+        //检查要重命名的文件是否存在，是否是文件
+        if (!toBeRenamed.exists() || toBeRenamed.isDirectory()) {
+            LOGGER.error("File does not exist: " + toBeRenamed.getName());
+            return;
+        }
+        //修改文件名
+        if (toBeRenamed.renameTo(newFile)) {
+//            LOGGER.info("File has been renamed.");
+        } else {
+            LOGGER.error("Error renaming file");
         }
     }
 }

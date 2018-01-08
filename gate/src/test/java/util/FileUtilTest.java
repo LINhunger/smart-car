@@ -1,5 +1,6 @@
 package util;
 
+import constant.GlobalConfig;
 import org.junit.Test;
 
 import java.io.File;
@@ -22,28 +23,31 @@ public class FileUtilTest {
 
     @Test
     public void getFilesByPathAndSuffix2() throws Exception {
-
+        File tempfile = new File(GlobalConfig.PICTURE_PATH + 2+ "\\" +GlobalConfig.TEMP_NAME);
+        tempfile.deleteOnExit();
+        tempfile.createNewFile();
     }
 
     @Test
     public void createFile() throws Exception {
-            FileUtil.createFile("D:\\JAVA\\IDEA\\IDEA\\smart-carssss\\picture1\\1.jpg");
+//        File picturefile = new File("J:\\project_smartCar\\temp"+ "\\" +GlobalConfig.PICTURE_NAME);
+//        System.out.println( picturefile.delete());
+//        FileUtil.renameFile(new File("J:\\project_smartCar\\temp" + "\\" +GlobalConfig.TEMP_NAME), new File("J:\\project_smartCar\\temp"+ "\\" +GlobalConfig.PICTURE_NAME));
     }
 
     @Test
     public void createDir() throws Exception {
-            FileUtil.createDir("D:\\JAVA\\IDEA\\IDEA\\smart-carssss\\picture1\\ssd");
+//            long startTime = System.currentTimeMillis();
+//        FileUtil.renameFile(new File("J:\\project_smartCar\\temp" + "\\" +GlobalConfig.PICTURE_NAME), new File("J:\\project_smartCar\\temp"+ "\\" +GlobalConfig.TEMP_NAME));
+//        System.out.println(System.currentTimeMillis() - startTime);
+//        long startTime = System.currentTimeMillis();
+//        File filename = new File("J:\\project_smartCar\\temp\\00001.jpg");
+//        filename.deleteOnExit();
+//        System.out.println(System.currentTimeMillis() - startTime);
     }
 
 
-    @Test
-    public void getFilesByPathAndSuffix() throws Exception {
 
-        File[] files  = FileUtil.getFilesByPathAndSuffix("F:\\壮哉我大QG\\智能小车\\代码\\ffmpeg-20170724-03a9e6f-win64-static\\bin\\temp",".jpg");
-        for (int i =0 ;i <files.length;i++) {
-//            System.out.println(files[i].getName());
-        }
-    }
 
 
 }

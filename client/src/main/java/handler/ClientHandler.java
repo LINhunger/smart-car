@@ -51,8 +51,10 @@ public class ClientHandler extends
             @Override
             public void run() {
                 try{
+                    //"C:\\Users\\Administrator\\Desktop\\smart-car-client\\temp"
                     File[] files  = FileUtil.getFilesByPathAndSuffix("J:\\project_smartCar\\temp",".jpg");
                     for (int i =0 ;i <files.length;i++) {
+                        if(i%10 == 0)
                         System.out.println(files[i].getName());
                         ByteBuf buf = Unpooled.buffer();
                         InputStream in = new BufferedInputStream(new FileInputStream(files[i]));
@@ -61,8 +63,14 @@ public class ClientHandler extends
                             buf.writeByte(temp);
                         }
                         in.close();
-//                        Thread.sleep(1000L);
+                        Thread.sleep(300L);
+                        if (ctx.isRemoved()) {
+                            break;
+                        }
                         ctx.writeAndFlush(buf);
+                        if ( i == files.length - 1) {
+                            i = 0;
+                        }
                     }
                 }catch (Exception e) {
                     System.err.println("testUpload method has been failed ");

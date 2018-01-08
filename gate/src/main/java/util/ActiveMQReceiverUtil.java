@@ -9,6 +9,7 @@ import javax.jms.Session;
 import javax.jms.TextMessage;
 
 import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.CharsetUtil;
 import org.apache.activemq.ActiveMQConnection;
@@ -116,8 +117,9 @@ public class ActiveMQReceiverUtil {
                 if (null != message) {
                     receiveMsg = message.getText();
                     if (receiveMsg != null) {
-                        ctx.writeAndFlush(Unpooled.copiedBuffer(receiveMsg, CharsetUtil.UTF_8));
-                        System.out.println("收到消息:" + message.getText());
+                        ChannelFuture future =  ctx.writeAndFlush(Unpooled.copiedBuffer(receiveMsg, CharsetUtil.UTF_8));
+                        future.get();
+                        System.out.println("mq has send message >> :" + message.getText());
                     }
 
                 } else {
